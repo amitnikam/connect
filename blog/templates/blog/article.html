@@ -1,0 +1,52 @@
+{% load crispy_forms_tags %}
+{% load my_tags %}
+<div class="row">
+    <div class="col-md-8">
+        {% for post in page_obj %}
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="{% url 'subject-profile' post.subject.code %}">{{ post.subject.name }}</a>| Posted by <a class="mr-2"
+                        href="{% url 'user-profile' post.author.username %}">{{ post.author }}</a>
+                    <small class="my-2"><span
+                            class="badge badge-info">{{ post.get_flare_display }}</span>
+                        {{ post.date_posted|date:"F d, Y" }}</small>
+                </div>
+                <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
+                <p class="article-content">{{ post.content }}</p>
+            </div>
+        </article>
+        {% endfor %}
+        {% if is_paginated %}
+            {% if page_obj.has_previous %}
+                <a class="btn btn-outline-info mb-4" href="?{% param_replace page=1 %}">First</a>
+                <a class="btn btn-outline-info mb-4" href="?{% param_replace page=page_obj.previous_page_number %}">Previous</a>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a class="btn btn-info mb-4" href="?{% param_replace page=num %}">{{ num }}</a>
+                {% elif num > page_obj.number|add:'-3' or num < page_obj.number|add:'3' %}
+                    <a class="btn btn-outline-info mb-4" href="?{% param_replace page=num %}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a class="btn btn-outline-info mb-4" href="?{% param_replace page=page_obj.next_page_number %}">Next</a>
+                <a class="btn btn-outline-info mb-4" href="?{% param_replace page=page_obj.paginator.num_pages %}">Last</a>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="col-md-4">
+        <div class="content-section">
+            <h3>Filter</h3>
+            <small class="text-muted">Search for specific types of posts</small>
+            <form method="GET">
+            <fieldset class="form-group">
+                {{ filter.form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Search</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>

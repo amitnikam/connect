@@ -1,0 +1,38 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<form method="GET" action="/u/">
+    <div class="input-group mb-5">
+        <input type="text" name="q" class="form-control" placeholder="Search using username / name / professions / skills" aria-label="Search using username / name / professions / skills">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+    <h6 class="border-bottom border-gray pb-2 mb-0">Users</h6>
+    <div class="row p-4">
+        {% for object in objects %}
+        <div class="col-md-6 rounded mb-3">
+            <div class="d-flex flex-row border rounded">
+                <div class="card w-25">
+                    <img src="{{object.profile.profile_pic.url}}"
+                        class="img-thumbnail border-0" />
+                </div>
+                <div class="pl-3 pt-2 pr-2 pb-2 w-75">
+                    {% if object.profile.full_name %}<h4 class="text-dark">{{object.profile.full_name}}</h4>{% endif %}
+                    <h5 class="text-info">u/{{object.username}}</h5>
+                    <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+                        {% if object.profile.profession %}<li><i class="icon-profession"></i> {{object.profile.profession}}</li>{% endif %}
+                        {% if object.profile.skill_1 %}<li><i class="icon-skill"></i> {{object.profile.skill_1}}</li>{% endif %}
+                    </ul>
+                    <p class="text-right m-0"><a href="{% url 'user-profile' object.username %}" class="btn btn-outline-info">Visit <i class="icon-goto"></i></a></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="com-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="com-profile-img">
+                    <img src="{{object.profile.profile_pic.url}}" alt="" class="rounded" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="com-profile-head">
+                    {% if object.profile.full_name %}
+                        <h5>{{object.profile.full_name}}</h5>
+                    {% endif %}
+                    <h6 class="mb-3">u/{{object.username}}</h6>
+                    {% if object.profile.profession %}
+                        <p class="com-proile-rating">Profession : <span>{{object.profile.profession}}</span></p>
+                    {% endif %}
+                    {% if object.profile.contact_me_at %}
+                        <p class="com-proile-rating">Contact : <span>{{object.profile.contact_me_at}}</span></p>
+                    {% endif %}
+                    {% if object.profile.bio %}
+                        <p class="com-proile-rating">Bio : <span>{{object.profile.bio}}</span></p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3">
+                {% if object == user %}
+                    <a href="{% url 'my-profile' %}" class="btn btn-sm btn-outline-secondary ml-3">Edit Profile</a>
+                {% endif %}
+                {% if object.profile.skill_1 or object.profile.skill_2 or object.profile.skill_3 %}
+                <div class="profile-work">
+                    <p class="pb-2">SKILLS</p>
+                    {% if object.profile.skill_1 %}<span>{{object.profile.skill_1}}</span><br>{% endif %}
+                    {% if object.profile.skill_2 %}<span>{{object.profile.skill_2}}</span><br>{% endif %}
+                    {% if object.profile.skill_3 %}<span>{{object.profile.skill_3}}</span><br>{% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+<h4 class="mb-3">Posts by u/{{view.kwargs.username}} ({{page_obj.paginator.count}})</h4>
+{% include 'blog/article.html' %}
+{% endblock content %}

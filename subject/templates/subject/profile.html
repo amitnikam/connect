@@ -1,0 +1,33 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="com-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="com-profile-img">
+                    <img src="{{object.sub_icon.url}}"
+                        alt="" class="rounded" />
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="com-profile-head p-3">
+                    <h5>
+                        {{object.name}}
+                    </h5>
+                    <h6>
+                        subject code: s/{{object.code}}
+                    </h6>
+                    <p class="com-proile-rating">KEYWORDS : <span>{{object.keywords}}</span></p>
+                    <p class="com-proile-rating"><span>{{object.bio}}</span></p>
+                </div>
+            </div>
+            <div class="col-md-4 mt-1">
+                <div class="p-2"><h4 class="mb-3">Total posts in s/{{view.kwargs.code}} <i class="text-info">({{page_obj.paginator.count}})</i></h4></div>
+                <div class="p-2"><h4 class="mb-3">Unique contributors <i class="text-info">({{contributors}})</i></h4></div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% include 'blog/article.html' %}
+{% endblock content %}

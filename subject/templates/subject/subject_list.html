@@ -1,0 +1,29 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<form method="GET" action="/s/">
+    <div class="input-group mb-5">
+        <input type="text" name="q" class="form-control content-section" placeholder="Search using Subject Name or Code or Keywords" aria-label="Search using Subject Name or Code or Keywords">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+
+
+<div class="my-3 p-3 bg-white content-section shadow-sm">
+    <h6 class="border-bottom border-gray pb-2 mb-0">Subjects</h6>
+    {% for subject in subjects %}
+    <div class="media text-muted pt-3">
+        <img src="{{subject.sub_icon.url}}" alt="{{subject.name}}" class="bd-placeholder-img mr-2 rounded" width="45"
+            height="45">
+        <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <strong class="d-block text-gray-dark"><a class="mr-2"
+                    href="{% url 'subject-profile' subject.code %}">s/{{ subject.code }} -
+                    {{ subject.name }}</a>| Keywords: {{subject.keywords}}</strong>
+            {{subject.bio}}
+        </p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

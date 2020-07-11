@@ -1,0 +1,65 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="{% url 'subject-profile' object.subject.code %}">s/{{ object.subject.code }}</a>|
+            Posted by <a class="mr-2" href="{% url 'user-profile' object.author.username %}">{{ object.author }}</a>
+            <small class="text-muted"><span class="badge badge-secondary mr-2">{{ object.get_flare_display }}</span>
+                {{ object.date_posted|date:"F d, Y" }}</small>
+            {% if object.author == user %}
+            <div>
+                <a href="{% url 'post-update' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">edit</a>
+                <a href="{% url 'post-delete' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1">Delete</a>
+            </div>
+            {% endif %}
+        </div>
+        <h3 class="article-title">{{ object.title }}</h3>
+        <p class="article-content">{{ object.content }}</p>
+        {% if user.is_authenticated %}
+        <form method="POST" action="{% url "post-detail" object.id %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Comment</button>
+            </div>
+        </form>
+        {% else %}
+        <a href="{% url 'user-login' %}" class="text-info">... login to comment</a>
+        {% endif %}
+    </div>
+</article>
+
+<h4>Comments ({{ comments.count }})</h4>
+<hr>
+
+{% if comments.count %}
+<div class="row">
+    <div class="col-md-12 col-md-offset-2 col-sm-12">
+        <ul class="media-list">
+            {% for comment in comments %}
+            <li class="media content-section">
+                <a href="{% url 'user-profile' comment.user.username %}" class="pull-left card rounded-circle mr-4">
+                    <img src="{{comment.user.profile.profile_pic.url}}" alt="{{comment.user.username}}"
+                        class="rounded-circle" style="width: 85px; height: 85px;">
+                </a>
+                <div class="media-body">
+                    <span class="text-muted pull-right">
+                        <small class="text-muted">{{ comment.timestamp|date:"F d, Y" }}</small>
+                    </span>
+                    <a href="{% url 'user-profile' comment.user.username %}"><strong
+                            class="text-success mr-1">{{comment.user.username}}</strong></a>
+                    {% if comment.user == user %}
+                    | <a href="{% url 'comment-update' comment.id %}" class="mr-1 ml-1 text-secondary"> edit</a>
+                    | <a href="{% url 'comment-delete' comment.id %}" class="ml-1 text-danger"> Delete</a>
+                    {% endif %}
+                    <p>{{ comment.reply }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}
